@@ -4,7 +4,6 @@ title: Preferences
 # Preferences
 
 You can change how GDevelop looks and acts to your liking.
-
 ## Opening Preferences
 
 On the **web app**: Projects manager → Preferences

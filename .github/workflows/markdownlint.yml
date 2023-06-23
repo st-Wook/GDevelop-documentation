@@ -69,6 +69,10 @@ jobs:
       id: get_modified_files
       run: |
         files=$(git diff --name-only HEAD^ HEAD)
+        if [ -z "$files" ]; then
+          echo "files_list=\"\"" >> $GITHUB_OUTPUT
+          exit 0
+        fi
         files_list=$(echo "$files" | sed 's/^/- /' | paste -s -d '\n' -)
         echo "files_list=$(echo "$files_list" | jq -R -s -c '@text')" >> $GITHUB_OUTPUT
       shell: bash

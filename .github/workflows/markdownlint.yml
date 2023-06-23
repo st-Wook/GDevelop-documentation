@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  pull-requests: write
 
 jobs:
   lint:
@@ -14,6 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
+        ref: ${{ github.head_ref }}
         fetch-depth: 0
     - uses: tj-actions/changed-files@v36
       id: changed-files

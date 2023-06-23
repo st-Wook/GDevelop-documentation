@@ -1,9 +1,6 @@
 name: Lint Markdown
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     types: [opened, synchronize, reopened, edited]
   workflow_dispatch:
@@ -48,9 +45,46 @@ jobs:
           !docs/gdevelop5/extensions/**/*.md
 
     - name: Commit and push
+      if: github.event_name != 'workflow_dispatch' && steps.changed-files.outputs.any_changed == 'true'
       run: |
         git config --global user.email "ci-builder@gdevelop.io"
         git config --global user.name "GDevelop documentation CI"
         git add .
         git commit -m "Fix lint errors" || echo "Nothing to commit (or error during commit?)"
         git push origin HEAD:${{ github.head_ref }} || echo "Nothing to push (or error during commit or push?)"
+
+    - name: Find the existing comment about games in the PR
+      if: github.event_name != 'workflow_dispatch' && steps.changed-files.outputs.any_changed == 'true'
+      uses: peter-evans/find-comment@v2
+      id: fc
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        comment-author: 'github-actions[bot]'
+        body-includes: "The most recent push includes modifications to the following files:"
+      
+    - name: Get list of modified files
+      if: github.event_name != 'workflow_dispatch' && steps.changed-files.outputs.any_changed == 'true'
+      id: get_modified_files
+      run: |
+        files=$(git diff --name-only HEAD^ HEAD)
+        files_list=$(echo "$files" | sed 's/^/- /' | paste -s -d '\n' -)
+        echo "files_list=$files_list" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Create or update comment
+      if: github.event_name != 'workflow_dispatch' && steps.changed-files.outputs.any_changed == 'true'
+      uses: peter-evans/create-or-update-comment@v3
+      with:
+        comment-id: ${{ steps.fc.outputs.comment-id }}
+        issue-number: ${{ github.event.pull_request.number }}
+        body: |
+          Hello 👋,
+
+          The most recent push includes modifications to the following files:
+          
+          ${{ steps.get_modified_files.outputs.files_list }}
+          
+          Please review these changes to ensure they align with the project's goals and guidelines. If you have any questions or concerns, feel free to comment here.
+          
+          Thank you for your contribution! 🚀
+        edit-mode: replace

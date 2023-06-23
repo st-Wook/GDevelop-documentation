@@ -63,18 +63,18 @@ jobs:
         issue-number: ${{ github.event.pull_request.number }}
         comment-author: 'github-actions[bot]'
         body-includes: "The most recent push includes modifications to the following files:"
-      
+
     - name: Get list of modified files
       if: github.event_name != 'workflow_dispatch' && steps.changed-files.outputs.any_changed == 'true'
       id: get_modified_files
       run: |
         files=$(git diff --name-only HEAD^ HEAD)
         files_list=$(echo "$files" | sed 's/^/- /' | paste -s -d '\n' -)
-        echo "files_list=$files_list" >> $GITHUB_OUTPUT
+        echo "files_list=$(echo "$files_list" | jq -R -s -c '@text')" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: Create or update comment
-      if: github.event_name != 'workflow_dispatch' && steps.changed-files.outputs.any_changed == 'true'
+      if: github.event_name != 'workflow_dispatch' && steps.changed-files.outputs.any_changed == 'true' && steps.get_modified_files.outputs.files_list != '""'
       uses: peter-evans/create-or-update-comment@v3
       with:
         comment-id: ${{ steps.fc.outputs.comment-id }}
@@ -83,10 +83,10 @@ jobs:
           Hello 👋,
 
           The most recent push includes modifications to the following files:
-          
-          ${{ steps.get_modified_files.outputs.files_list }}
-          
+
+          ${{ fromJSON(steps.get_modified_files.outputs.files_list) }}
+
           Please review these changes to ensure they align with the project's goals and guidelines. If you have any questions or concerns, feel free to comment here.
-          
+
           Thank you for your contribution! 🚀
         edit-mode: replace

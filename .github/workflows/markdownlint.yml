@@ -62,7 +62,7 @@ jobs:
       with:
         issue-number: ${{ github.event.pull_request.number }}
         comment-author: 'github-actions[bot]'
-        body-includes: "The most recent push includes modifications to the following files:"
+        body-includes: "Markdown lint errors were detected and have been automatically changed. Here is the list of changed files:"
 
     - name: Get list of modified files
       if: github.event_name != 'workflow_dispatch' && steps.changed-files.outputs.any_changed == 'true'
@@ -92,7 +92,7 @@ jobs:
         body: |
           Hello 👋,
 
-          The most recent push includes modifications to the following files:
+          Markdown lint errors were detected and have been automatically changed. Here is the list of changed files:
 
           ${{ fromJSON(steps.get_modified_files.outputs.files_list) }}
 

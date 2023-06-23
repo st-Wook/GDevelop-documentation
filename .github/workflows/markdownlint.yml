@@ -69,7 +69,7 @@ jobs:
       id: get_modified_files
       run: |
         author=$(git log -1 --pretty=format:'%an')
-        if [ "$author" == "GDevelop documentation CI Autor" ]; then
+        if [ "$author" == "GDevelop documentation CI" ]; then
           files=$(git diff --name-only HEAD^ HEAD)
           if [ -z "$files" ]; then
             echo "name=files_list=\"\"" >> $GITHUB_OUTPUT

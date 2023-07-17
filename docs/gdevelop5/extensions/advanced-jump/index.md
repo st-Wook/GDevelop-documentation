@@ -24,7 +24,6 @@ An example allows to check it out ([open the project online](https://editor.gdev
 
 
 ## Coyote time and air jump 
-
 Let platformer characters jump shortly after leaving a platform and also jump in mid-air. 
 
 ### Behavior actions

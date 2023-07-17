@@ -15,7 +15,6 @@ object or behavior they belong too. When `Object` is written, you should enter a
     Expressions are sometime also called functions, like in mathematics.
 
 ## Objects
-
 Common features that can be used for all objects in GDevelop. [Read more explanations about it.](https://wiki.gdevelop.io/gdevelop5/objects/base_object/events)
 
 | Expression | Description |  |

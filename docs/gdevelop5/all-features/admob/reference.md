@@ -3,7 +3,6 @@
 Allow to display AdMob banners, app open, interstitials, rewarded interstitials and rewarded video ads. [Read more explanations about it.](https://wiki.gdevelop.io/gdevelop5/all-features/admob)
 
 ## Actions
-
 **Mark the reward of the rewarded interstitial as claimed**  
 Mark the rewarded interstitial reward as claimed. Useful if you used the condition to check if the reward was given to the user without clearing the reward.
 

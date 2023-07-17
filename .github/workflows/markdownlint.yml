@@ -13,10 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == false && github.event.pull_request.draft == false
     steps:
+    - uses: xt0rted/pull-request-comment-branch@v2
+      id: comment-branch
+
     - uses: actions/checkout@v3
       with:
-        ref: ${{ github.event.pull_request.head.sha }}
-        fetch-depth: 0
+        ref: ${{ steps.comment-branch.outputs.head_ref }}
 
     - uses: tj-actions/changed-files@v36
       id: changed-files
@@ -46,7 +48,7 @@ jobs:
         git config --global user.name "GDevelop documentation CI"
         git add .
         git commit -m "Fix lint errors" || echo "Nothing to commit (or error during commit?)"
-        git push origin HEAD:${{ github.head_ref }} || echo "Nothing to push (or error during commit or push?)"
+        git push || echo "Nothing to push (or error during commit or push?)"
 
     - name: Find the existing comment about games in the PR
       if: steps.changed-files.outputs.any_changed == 'true'

@@ -13,12 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == false && github.event.pull_request.draft == false
     steps:
-    - uses: xt0rted/pull-request-comment-branch@v2
-      id: comment-branch
-
     - uses: actions/checkout@v3
       with:
-        ref: ${{ steps.comment-branch.outputs.head_ref }}
+        ref: ${{ github.event.pull_request.head.ref }}
 
     - uses: tj-actions/changed-files@v36
       id: changed-files

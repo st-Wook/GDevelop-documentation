@@ -46,7 +46,7 @@ jobs:
         git config --global user.name "GDevelop documentation CI"
         git add .
         git commit -m "Fix lint errors" || echo "Nothing to commit (or error during commit?)"
-        git push || echo "Nothing to push (or error during commit or push?)"
+        git push origin HEAD:${{ github.event.pull_request.head.sha }} || echo "Nothing to push (or error during commit or push?)"
 
     - name: Find the existing comment about games in the PR
       if: steps.changed-files.outputs.any_changed == 'true'
